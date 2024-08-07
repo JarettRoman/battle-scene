@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dju8kdkgmvgi0"]
+
+[ext_resource type="Script" path="res://scripts/stats.gd" id="1_wn50q"]
+
+[resource]
+script = ExtResource("1_wn50q")
+health = 10
+strength = 3
