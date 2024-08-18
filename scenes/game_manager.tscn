@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://dtvp7xg728e4u"]
+
+[ext_resource type="Script" path="res://game_manager.gd" id="1_p4ha3"]
+[ext_resource type="PackedScene" uid="uid://by7x7lum6xc0p" path="res://scenes/main_menu.tscn" id="2_wf23b"]
+[ext_resource type="PackedScene" uid="uid://dnsn26ckuh3wt" path="res://scenes/battle.tscn" id="3_7eaj6"]
+
+[node name="GameManager" type="Node"]
+script = ExtResource("1_p4ha3")
+main_menu = ExtResource("2_wf23b")
+battle_scene = ExtResource("3_7eaj6")
+
+[node name="MainMenu" parent="." instance=ExtResource("2_wf23b")]
+
+[node name="Battle" parent="." instance=ExtResource("3_7eaj6")]

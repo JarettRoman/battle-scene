@@ -1,13 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://dnsn26ckuh3wt"]
+[gd_scene load_steps=6 format=3 uid="uid://dnsn26ckuh3wt"]
 
-[ext_resource type="Script" path="res://scenes/battle.gd" id="1_dqy4l"]
+[ext_resource type="Script" path="res://scripts/battle.gd" id="1_dqy4l"]
 [ext_resource type="Texture2D" uid="uid://cri8mehsrtg4a" path="res://assets/bg.png" id="2_qn6ts"]
-[ext_resource type="Script" path="res://scripts/player.gd" id="3_85t67"]
-[ext_resource type="Texture2D" uid="uid://dp58o4ov2wp2o" path="res://assets/Adventurer-1.5/Individual Sprites/adventurer-idle-00.png" id="3_k6u1m"]
-[ext_resource type="Resource" uid="uid://dju8kdkgmvgi0" path="res://player_stats.tres" id="4_otm6i"]
-[ext_resource type="Texture2D" uid="uid://ftrvn1o6aqqs" path="res://assets/FREE_Samurai 2D Pixel Art/Sprites/samurai.png" id="4_x3bxa"]
-[ext_resource type="Script" path="res://scenes/Enemy.gd" id="6_i04or"]
-[ext_resource type="Resource" uid="uid://cwwt75mclc8w3" path="res://enemy_stats.tres" id="7_5lduw"]
+[ext_resource type="PackedScene" uid="uid://bd5tgikbhtj71" path="res://scenes/fighter.tscn" id="3_8vqx7"]
+[ext_resource type="PackedScene" uid="uid://c018vkus66c6i" path="res://scenes/enemy.tscn" id="4_gj1xr"]
 [ext_resource type="AudioStream" uid="uid://3h5iyskh0m7b" path="res://assets/PeriTune-2020_9-Battle_Tracks/1-BattleField.mp3" id="9_f0j54"]
 
 [node name="Battle" type="Node2D" node_paths=PackedStringArray("command_box", "info_box")]
@@ -20,26 +16,11 @@ position = Vector2(80, 45)
 texture = ExtResource("2_qn6ts")
 centered = false
 
-[node name="Player" type="Node2D" parent="."]
-position = Vector2(200, 200)
-script = ExtResource("3_85t67")
-stats = ExtResource("4_otm6i")
+[node name="Player" parent="." instance=ExtResource("3_8vqx7")]
+position = Vector2(200, 215)
 
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
-texture = ExtResource("3_k6u1m")
-centered = false
-metadata/_edit_lock_ = true
-
-[node name="Enemy" type="Node2D" parent="."]
-position = Vector2(400, 195)
-script = ExtResource("6_i04or")
-stats = ExtResource("7_5lduw")
-
-[node name="Samurai" type="Sprite2D" parent="Enemy"]
-texture = ExtResource("4_x3bxa")
-centered = false
-flip_h = true
-metadata/_edit_lock_ = true
+[node name="Enemy" parent="." instance=ExtResource("4_gj1xr")]
+position = Vector2(400, 215)
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -90,6 +71,7 @@ offset_bottom = 191.0
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("9_f0j54")
+autoplay = true
 
 [connection signal="button_down" from="UI/CommandBox/AttackButton" to="." method="_on_button_button_down"]
 [connection signal="button_down" from="UI/CommandBox/SpecialButton" to="." method="_on_special_button_button_down"]

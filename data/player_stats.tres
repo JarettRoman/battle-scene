@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_wn50q")
-health = 10
+health = 8
 strength = 3

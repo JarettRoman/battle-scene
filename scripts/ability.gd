@@ -1,11 +1,15 @@
-extends Node2D
+extends Node
 
-@export var stats : Resource
+class_name Ability
+
+@export var ability_name : String
+@export var base_damage : int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if stats:
-		print(stats.health)
+	if not ability_name:
+		ability_name = name
+	print(name)
 	pass # Replace with function body.
 
 

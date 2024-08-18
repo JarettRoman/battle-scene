@@ -1,13 +1,13 @@
 extends Node2D
 
-@export var command_box : Control
+@export var command_box: Control
 @export var info_box: Label
 
 @onready var player: Node2D = get_node("Player")
 @onready var enemy: Node2D = get_node("Enemy")
 
-@onready var player_hp_counter : Label = get_node("UI/PlayerHP")
-@onready var enemy_hp_counter : Label = get_node("UI/EnemyHP")
+@onready var player_hp_counter: Label = get_node("UI/PlayerHP")
+@onready var enemy_hp_counter: Label = get_node("UI/EnemyHP")
 
 
 var player_turn: bool = true
@@ -18,6 +18,11 @@ var capture_timed_input: bool = false
 
 var timed_input_successful: bool = false
 
+var attack_inputs: Array[String] = ["ui_up", "ui_up", "ui_accept"]
+
+var successful_inputs: int = 0
+
+
 enum STATES {
 	START,
 	AWAIT_INPUT,
@@ -27,7 +32,7 @@ enum STATES {
 	DEFEAT
 }
 
-var current_state : STATES:
+var current_state: STATES:
 	get:
 		return current_state
 	set(state):
@@ -51,8 +56,10 @@ var current_state : STATES:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	player_hp_counter.text = str(player.stats.health)
-	enemy_hp_counter.text = str(enemy.stats.health)
+	#print(player.health_component.health)
+	player_hp_counter.text = str(player.health_component.health)
+	enemy_hp_counter.text = str(enemy.health_component.health)
+	player.health_component.health_depleted.connect(_on_player_hp_deleted)
 	current_state = STATES.START
 
 
@@ -60,18 +67,17 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
+
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and capture_timed_input:
-		var keycode = DisplayServer.keyboard_get_keycode_from_physical(event.physical_keycode)
-		print(keycode)
-		print(OS.get_keycode_string(keycode))
-		if keycode == 70:
-			print("success")
-			timed_input_successful = true
-		else:
-			print("fail")
-			timed_input_successful = false
-		capture_timed_input = false
+	if event is InputEventKey and capture_timed_input and successful_inputs < attack_inputs.size() and event.is_action_pressed(attack_inputs[successful_inputs]):
+		if event.pressed and not event.is_echo():
+			successful_inputs += 1
+			if successful_inputs == attack_inputs.size():
+				timed_input_successful = true
+	elif event is InputEventKey and capture_timed_input and successful_inputs < attack_inputs.size() and not event.is_action_pressed(attack_inputs[successful_inputs]):
+		if event.pressed and not event.is_echo():
+			successful_inputs = 0
+
 
 func on_start() -> void:
 	if battle_started:
@@ -99,16 +105,16 @@ func on_execute() -> void:
 	if not player_turn:
 		command_box.visible = false
 		info_box.text = "The enemy attacks you!"
-		player.stats.health -= enemy.stats.strength
+		player.health_component.damage(enemy.stats.strength)
 	# wait for an animation to play out
 	await get_tree().create_timer(3.0).timeout
-	#capture_timed_input = false
-	player_hp_counter.text = str(clamp(player.stats.health, 0, 999))
-	enemy_hp_counter.text = str(clamp(enemy.stats.health, 0, 999))
-	if enemy.stats.health <= 0:
+	capture_timed_input = false
+	player_hp_counter.text = str(clamp(player.health_component.health, 0, 999))
+	enemy_hp_counter.text = str(clamp(enemy.health_component.health, 0, 999))
+	if enemy.health_component.health <= 0:
 		current_state = STATES.VICTORY
 		return
-	elif player.stats.health <= 0:
+	elif player.health_component.health <= 0:
 		current_state = STATES.DEFEAT
 		return
 	current_state = STATES.END
@@ -132,20 +138,27 @@ func on_defeat() -> void:
 
 func _on_button_button_down() -> void:
 	command_box.visible = false
-	info_box.text = "Player attacks! Press F!"
+	info_box.text = "Player attacks! Press Up Up Z!"
 	capture_timed_input = true
 	await get_tree().create_timer(2.0).timeout
-	enemy.stats.health -= player.stats.strength if timed_input_successful else 0
+	if timed_input_successful:
+		enemy.health_component.damage(player.stats.strength)
+	successful_inputs = 0
 	timed_input_successful = false
 	current_state = STATES.EXECUTE
 
 
 func _on_special_button_button_down() -> void:
 	command_box.visible = false
-	info_box.text = "Player performs a special attack! Press F!"
+	info_box.text = "Player performs a special attack! Press Up Up Z!"
 	capture_timed_input = true
 	await get_tree().create_timer(2.0).timeout
-	enemy.stats.health -= player.stats.strength + 1 if timed_input_successful else 0
+	if timed_input_successful:
+		enemy.health_component.damage(player.stats.strength)
+	successful_inputs = 0
 	timed_input_successful = false
 	current_state = STATES.EXECUTE
-	
+
+
+func _on_player_hp_deleted() -> void:
+	print("player defeated signal")

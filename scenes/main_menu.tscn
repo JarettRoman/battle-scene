@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://by7x7lum6xc0p"]
+
+[ext_resource type="Theme" uid="uid://bb6vwl0h1flws" path="res://assets/FlatUI4/kenneyUI-blue.tres" id="1_5ymfc"]
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_tgeuj"]
+[ext_resource type="PackedScene" uid="uid://dnsn26ckuh3wt" path="res://scenes/battle.tscn" id="2_6nti3"]
+[ext_resource type="PackedScene" uid="uid://kqmm0clka6tm" path="res://scenes/skills_view.tscn" id="3_jy3dt"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_5ymfc")
+script = ExtResource("1_tgeuj")
+demo = ExtResource("2_6nti3")
+skills_view = ExtResource("3_jy3dt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.95
+anchor_top = 0.5
+anchor_right = 0.95
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = -50.5
+offset_bottom = 50.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../QuitButton")
+text = "Start Demo"
+
+[node name="SkillsViewButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Skills"
+
+[node name="QuitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_neighbor_bottom = NodePath("../StartButton")
+text = "Quit to Desktop"
+
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SkillsViewButton" to="." method="_on_skills_view_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
