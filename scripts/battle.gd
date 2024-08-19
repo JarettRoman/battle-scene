@@ -56,7 +56,14 @@ var current_state: STATES:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("combat is playing")
+	print(GameManager.equipped_skills)
+	for i in GameManager.equipped_skills:
+		print("Combat - equipped %s" % i.skill_name)
 	#print(player.health_component.health)
+	#print(GameManager.equipped_skills.all(func(skill): return "Combat - Equipped %s" % skill.skill_name))
+	#GameManager.equipped_skills.all(func(skill): print(skill.skill_name))
+	#print(GameManager.equipped_abilities[0].ability_name)
 	player_hp_counter.text = str(player.health_component.health)
 	enemy_hp_counter.text = str(enemy.health_component.health)
 	player.health_component.health_depleted.connect(_on_player_hp_deleted)

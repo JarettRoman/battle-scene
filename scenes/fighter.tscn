@@ -2,25 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ehek7"]
 [ext_resource type="Resource" uid="uid://dju8kdkgmvgi0" path="res://data/player_stats.tres" id="2_r12mr"]
-[ext_resource type="Texture2D" uid="uid://dp58o4ov2wp2o" path="res://assets/Adventurer-1.5/Individual Sprites/adventurer-idle-00.png" id="3_s8jph"]
-[ext_resource type="Texture2D" uid="uid://cuscdkn6x5ewt" path="res://assets/Adventurer-1.5/Individual Sprites/adventurer-idle-01.png" id="4_bb31t"]
+[ext_resource type="SpriteFrames" uid="uid://2q0xccci6hvy" path="res://scenes/fighter_sprite_frames.tres" id="3_rkb3a"]
 [ext_resource type="PackedScene" uid="uid://dsgdi0805gtdw" path="res://scenes/health_component.tscn" id="5_qwbu3"]
+[ext_resource type="Script" path="res://scripts/skill.gd" id="6_0i6pg"]
 [ext_resource type="Script" path="res://scripts/abilities_component.gd" id="6_cf4ld"]
 [ext_resource type="Script" path="res://scripts/ability.gd" id="7_btban"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ao7b6"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_s8jph")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_bb31t")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 4.0
-}]
+[ext_resource type="Resource" uid="uid://dwfirp8s4akw3" path="res://data/slash.tres" id="7_s41ds"]
 
 [node name="Fighter" type="Node2D" node_paths=PackedStringArray("health_component")]
 script = ExtResource("1_ehek7")
@@ -28,7 +15,7 @@ stats = ExtResource("2_r12mr")
 health_component = NodePath("HealthComponent")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_ao7b6")
+sprite_frames = ExtResource("3_rkb3a")
 animation = &"idle"
 autoplay = "idle"
 frame_progress = 0.263754
@@ -40,6 +27,7 @@ max_health = 9
 [node name="AbilitiesComponent" type="Node" parent="." node_paths=PackedStringArray("abilities")]
 script = ExtResource("6_cf4ld")
 abilities = [NodePath("Slash")]
+skills = Array[ExtResource("6_0i6pg")]([ExtResource("7_s41ds")])
 
 [node name="Slash" type="Node" parent="AbilitiesComponent"]
 script = ExtResource("7_btban")

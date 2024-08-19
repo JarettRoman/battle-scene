@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3 uid="uid://2q0xccci6hvy"]
+
+[ext_resource type="Texture2D" uid="uid://dp58o4ov2wp2o" path="res://assets/Adventurer-1.5/Individual Sprites/adventurer-idle-00.png" id="1_mn884"]
+[ext_resource type="Texture2D" uid="uid://cuscdkn6x5ewt" path="res://assets/Adventurer-1.5/Individual Sprites/adventurer-idle-01.png" id="2_esqps"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mn884")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_esqps")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 4.0
+}]

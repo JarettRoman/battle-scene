@@ -9,7 +9,6 @@ class_name Ability
 func _ready() -> void:
 	if not ability_name:
 		ability_name = name
-	print(name)
 	pass # Replace with function body.
 
 

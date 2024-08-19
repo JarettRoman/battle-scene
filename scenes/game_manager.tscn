@@ -8,7 +8,3 @@
 script = ExtResource("1_p4ha3")
 main_menu = ExtResource("2_wf23b")
 battle_scene = ExtResource("3_7eaj6")
-
-[node name="MainMenu" parent="." instance=ExtResource("2_wf23b")]
-
-[node name="Battle" parent="." instance=ExtResource("3_7eaj6")]

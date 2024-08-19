@@ -4,6 +4,10 @@ extends Node
 
 var current_scene = null
 
+var equipped_abilities : Array[Ability]
+var equipped_skills : Array[Skill]
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var root = get_tree().root
@@ -18,7 +22,7 @@ func goto_scene(scene : PackedScene):
 
 	# The solution is to defer the load to a later time, when
 	# we can be sure that no code from the current scene is running:
-
+	#print(GameManager.equipped_skills)
 	call_deferred("_deferred_goto_scene", scene)
 
 

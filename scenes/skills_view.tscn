@@ -1,4 +1,16 @@
-[gd_scene format=3 uid="uid://kqmm0clka6tm"]
+[gd_scene load_steps=8 format=3 uid="uid://kqmm0clka6tm"]
+
+[ext_resource type="Script" path="res://scripts/skills_view.gd" id="1_svjqc"]
+[ext_resource type="Script" path="res://scripts/skill.gd" id="2_7egnp"]
+[ext_resource type="PackedScene" uid="uid://bd5tgikbhtj71" path="res://scenes/fighter.tscn" id="2_pn41d"]
+[ext_resource type="Resource" uid="uid://dwfirp8s4akw3" path="res://data/slash.tres" id="3_ba1cv"]
+[ext_resource type="Script" path="res://scripts/ability.gd" id="3_txk37"]
+[ext_resource type="Resource" uid="uid://cswpv0wkp7tpv" path="res://data/stab.tres" id="4_et8ln"]
+
+[sub_resource type="Resource" id="Resource_66gk4"]
+script = ExtResource("2_7egnp")
+skill_name = "Fence"
+base_damage = 3
 
 [node name="SkillsView" type="Control"]
 layout_mode = 3
@@ -7,9 +19,43 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_svjqc")
+skills = Array[ExtResource("2_7egnp")]([ExtResource("3_ba1cv"), ExtResource("4_et8ln"), SubResource("Resource_66gk4")])
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 text = "Skills View goes here!"
+
+[node name="Fighter" parent="." instance=ExtResource("2_pn41d")]
+position = Vector2(192, 160)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -156.0
+offset_right = 80.0
+offset_bottom = 164.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="Gouge" type="Node" parent="."]
+script = ExtResource("3_txk37")
+ability_name = "Gouge"
+base_damage = 5
+
+[node name="Slash" type="Node" parent="."]
+script = ExtResource("3_txk37")
+ability_name = "Slash"
+base_damage = 3
