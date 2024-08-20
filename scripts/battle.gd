@@ -58,20 +58,12 @@ var current_state: STATES:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("combat is playing")
-	print(GameManager.equipped_skills)
 	skills = GameManager.equipped_skills
-	#for i in skills:
-		#print("Combat - equipped %s" % i.skill_name)
 	for skill in skills:
 		var skill_button = Button.new()
 		skill_button.text = skill.skill_name
 		skill_button.pressed.connect(_on_skill_button_down.bind(skill))
 		$UI/CommandBox.add_child(skill_button)
-	#print(player.health_component.health)
-	#print(GameManager.equipped_skills.all(func(skill): return "Combat - Equipped %s" % skill.skill_name))
-	#GameManager.equipped_skills.all(func(skill): print(skill.skill_name))
-	#print(GameManager.equipped_abilities[0].ability_name)
 	player_hp_counter.text = str(player.health_component.health)
 	enemy_hp_counter.text = str(enemy.health_component.health)
 	player.health_component.health_depleted.connect(_on_player_hp_deleted)
@@ -106,7 +98,6 @@ func on_start() -> void:
 		
 	current_state = STATES.AWAIT_INPUT
 		
-
 
 func on_await_input() -> void:
 	if player_turn:
@@ -171,29 +162,6 @@ func _on_skill_button_down(skill: Skill) -> void:
 	timed_input_successful = false
 	current_state = STATES.EXECUTE
 	pass
-
-func _on_button_button_down() -> void:
-	command_box.visible = false
-	info_box.text = "Player attacks! Press Up Up Z!"
-	capture_timed_input = true
-	await get_tree().create_timer(2.0).timeout
-	if timed_input_successful:
-		enemy.health_component.damage(player.stats.strength)
-	successful_inputs = 0
-	timed_input_successful = false
-	current_state = STATES.EXECUTE
-
-
-func _on_special_button_button_down() -> void:
-	command_box.visible = false
-	info_box.text = "Player performs a special attack! Press Up Up Z!"
-	capture_timed_input = true
-	await get_tree().create_timer(2.0).timeout
-	if timed_input_successful:
-		enemy.health_component.damage(player.stats.strength)
-	successful_inputs = 0
-	timed_input_successful = false
-	current_state = STATES.EXECUTE
 
 
 func _on_player_hp_deleted() -> void:
