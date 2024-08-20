@@ -22,12 +22,12 @@ func _input(event) -> void:
 		for i in equipped_skills:
 			print("Equipped: %s" % i.skill_name)
 		GameManager.equipped_skills.assign(equipped_skills)
-		GameManager.goto_scene(main_menu)
+		GameManager.goto_main_menu()
 		
 func _skill_button_pressed(skill: Skill) -> void:
 	print("pressing skill: %s" % skill.skill_name)
 	if equipped_skills.has(skill):
-		print("%s is equipped already" % skill.skill_name)
+		print("Unequipped %s" % skill.skill_name)
 		equipped_skills.erase(skill)
 	else:
 		print("%s is now equipped" % skill.skill_name)

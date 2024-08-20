@@ -19,5 +19,5 @@ func set_health(val:int) -> void:
 	if health == 0:
 		health_depleted.emit()
 
-func damage(damage : int) -> void:
-	health = health - damage
+func damage(val : int) -> void:
+	health = health - val

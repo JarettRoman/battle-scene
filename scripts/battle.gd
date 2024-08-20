@@ -22,6 +22,8 @@ var attack_inputs: Array[String] = ["ui_up", "ui_up", "ui_accept"]
 
 var successful_inputs: int = 0
 
+var skills: Array[Skill]
+
 
 enum STATES {
 	START,
@@ -58,8 +60,14 @@ var current_state: STATES:
 func _ready() -> void:
 	print("combat is playing")
 	print(GameManager.equipped_skills)
-	for i in GameManager.equipped_skills:
-		print("Combat - equipped %s" % i.skill_name)
+	skills = GameManager.equipped_skills
+	#for i in skills:
+		#print("Combat - equipped %s" % i.skill_name)
+	for skill in skills:
+		var skill_button = Button.new()
+		skill_button.text = skill.skill_name
+		skill_button.pressed.connect(_on_skill_button_down.bind(skill))
+		$UI/CommandBox.add_child(skill_button)
 	#print(player.health_component.health)
 	#print(GameManager.equipped_skills.all(func(skill): return "Combat - Equipped %s" % skill.skill_name))
 	#GameManager.equipped_skills.all(func(skill): print(skill.skill_name))
@@ -103,6 +111,7 @@ func on_start() -> void:
 func on_await_input() -> void:
 	if player_turn:
 		command_box.visible = true
+		command_box.get_child(0).grab_focus()
 		info_box.text = "What will you do?"
 	else:
 		current_state = STATES.EXECUTE
@@ -137,11 +146,31 @@ func on_end() -> void:
 
 func on_victory() -> void:
 	info_box.text = "You win! Congratulations!"
+	await get_tree().create_timer(2.0).timeout
+	GameManager.goto_main_menu()
 
 
 func on_defeat() -> void:
 	info_box.text = "You lost! Oh no!"
+	await get_tree().create_timer(2.0).timeout
+	GameManager.goto_main_menu()
 
+
+func _on_skill_button_down(skill: Skill) -> void:
+	command_box.visible = false
+	info_box.text = "You use %s! Press Up Up Z!" % skill.skill_name
+	capture_timed_input = true
+	await get_tree().create_timer(2.0).timeout
+	if timed_input_successful:
+		var total_damage = player.stats.strength + skill.base_damage
+		enemy.health_component.damage(total_damage)
+		info_box.text = "You deal %s damage!" % total_damage
+	else:
+		info_box.text = "You missed!"
+	successful_inputs = 0
+	timed_input_successful = false
+	current_state = STATES.EXECUTE
+	pass
 
 func _on_button_button_down() -> void:
 	command_box.visible = false

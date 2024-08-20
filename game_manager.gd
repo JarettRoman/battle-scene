@@ -1,19 +1,27 @@
 extends Node
-@export var main_menu : PackedScene
-@export var battle_scene : PackedScene
 
 var current_scene = null
 
-var equipped_abilities : Array[Ability]
 var equipped_skills : Array[Skill]
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var root = get_tree().root
 	current_scene = root.get_child(root.get_child_count() - 1)
 
-func goto_scene(scene : PackedScene):
+func goto_main_menu() -> void:
+	var main_scene = load("res://scenes/main_menu.tscn")
+	goto_scene(main_scene)
+	
+func goto_skills_view() -> void:
+	var skill_view = load("res://scenes/skills_view.tscn")
+	goto_scene(skill_view)
+	
+func goto_combat_scene() -> void:
+	var combat_scene = load("res://scenes/battle.tscn")
+	goto_scene(combat_scene)
+
+func goto_scene(scene : PackedScene) -> void:
 	# This function will usually be called from a signal callback,
 	# or some other function in the current scene.
 	# Deleting the current scene at this point is
