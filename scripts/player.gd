@@ -11,3 +11,13 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func play_ability_animation(skill_name : String) -> void:
+		$AnimationPlayer.play("move_forward")
+		$AnimationPlayer.queue("slash")
+		$AnimationPlayer.queue("move_backward")
+		$AnimationPlayer.queue("idle")
+
+func _on_animation_player_animation_finished(anim_name:StringName) -> void:
+	print(anim_name)
+	pass # Replace with function body.

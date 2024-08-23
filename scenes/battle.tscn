@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dnsn26ckuh3wt"]
+[gd_scene load_steps=7 format=3 uid="uid://dnsn26ckuh3wt"]
 
 [ext_resource type="Script" path="res://scripts/battle.gd" id="1_dqy4l"]
 [ext_resource type="Texture2D" uid="uid://cri8mehsrtg4a" path="res://assets/bg.png" id="2_qn6ts"]
 [ext_resource type="PackedScene" uid="uid://bd5tgikbhtj71" path="res://scenes/fighter.tscn" id="3_8vqx7"]
 [ext_resource type="PackedScene" uid="uid://c018vkus66c6i" path="res://scenes/enemy.tscn" id="4_gj1xr"]
 [ext_resource type="AudioStream" uid="uid://dyrkhgnmxhj62" path="res://assets/1-BattleField.mp3" id="5_fljgp"]
+[ext_resource type="Script" path="res://scripts/battle_ui.gd" id="5_pehbf"]
 
 [node name="Battle" type="Node2D" node_paths=PackedStringArray("command_box", "info_box")]
 script = ExtResource("1_dqy4l")
@@ -28,6 +29,7 @@ anchors_preset = 0
 offset_right = 640.0
 offset_bottom = 360.0
 size_flags_vertical = 4
+script = ExtResource("5_pehbf")
 
 [node name="CommandBox" type="VBoxContainer" parent="UI"]
 layout_mode = 1

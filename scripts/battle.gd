@@ -24,7 +24,6 @@ var successful_inputs: int = 0
 
 var skills: Array[Skill]
 
-
 enum STATES {
 	START,
 	AWAIT_INPUT,
@@ -38,7 +37,6 @@ var current_state: STATES:
 	get:
 		return current_state
 	set(state):
-		print("firing ending funcs for: %s" % STATES.keys()[current_state])
 		match state:
 			STATES.START:
 				on_start()
@@ -53,20 +51,22 @@ var current_state: STATES:
 			STATES.DEFEAT:
 				on_defeat()
 		current_state = state
-		print("firing beginning actions for state: %s" % STATES.keys()[state])
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	skills = GameManager.equipped_skills
+
 	for skill in skills:
 		var skill_button = Button.new()
 		skill_button.text = skill.skill_name
 		skill_button.pressed.connect(_on_skill_button_down.bind(skill))
 		$UI/CommandBox.add_child(skill_button)
+
 	player_hp_counter.text = str(player.health_component.health)
 	enemy_hp_counter.text = str(enemy.health_component.health)
 	player.health_component.health_depleted.connect(_on_player_hp_deleted)
+	$Player/AnimationPlayer.play("idle")
 	current_state = STATES.START
 
 
@@ -98,6 +98,7 @@ func on_start() -> void:
 		
 	current_state = STATES.AWAIT_INPUT
 		
+
 
 func on_await_input() -> void:
 	if player_turn:
@@ -153,6 +154,7 @@ func _on_skill_button_down(skill: Skill) -> void:
 	capture_timed_input = true
 	await get_tree().create_timer(2.0).timeout
 	if timed_input_successful:
+		player.play_ability_animation(skill.skill_name)
 		var total_damage = player.stats.strength + skill.base_damage
 		enemy.health_component.damage(total_damage)
 		info_box.text = "You deal %s damage!" % total_damage
@@ -161,8 +163,6 @@ func _on_skill_button_down(skill: Skill) -> void:
 	successful_inputs = 0
 	timed_input_successful = false
 	current_state = STATES.EXECUTE
-	pass
-
 
 func _on_player_hp_deleted() -> void:
 	print("player defeated signal")
