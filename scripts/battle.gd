@@ -132,7 +132,6 @@ func on_end() -> void:
 	info_box.text = "End of turn."
 	await get_tree().create_timer(3.0).timeout
 	player_turn = not player_turn
-	print(player_turn)
 	current_state = STATES.START
 
 
@@ -154,7 +153,8 @@ func _on_skill_button_down(skill: Skill) -> void:
 	capture_timed_input = true
 	await get_tree().create_timer(2.0).timeout
 	if timed_input_successful:
-		player.play_ability_animation(skill.skill_name)
+		# player.play_ability_animation(skill.skill_name)
+		player.attack()
 		var total_damage = player.stats.strength + skill.base_damage
 		enemy.health_component.damage(total_damage)
 		info_box.text = "You deal %s damage!" % total_damage

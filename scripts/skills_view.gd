@@ -8,7 +8,6 @@ var main_menu : PackedScene = load("res://scenes/main_menu.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#print(skills)
 	equipped_skills = GameManager.equipped_skills
 	for skill in skills:
 		var skill_button = Button.new()
@@ -19,8 +18,6 @@ func _ready() -> void:
 
 func _input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		for i in equipped_skills:
-			print("Equipped: %s" % i.skill_name)
 		GameManager.equipped_skills.assign(equipped_skills)
 		GameManager.goto_main_menu()
 		
