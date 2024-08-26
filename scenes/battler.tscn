@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dq2b1yjlhs05t"]
+
+[ext_resource type="Script" path="res://scripts/Battler.gd" id="1_yyisu"]
+[ext_resource type="Script" path="res://scripts/health_component.gd" id="2_hij2r"]
+[ext_resource type="Script" path="res://scripts/states/state_machine.gd" id="3_mbcdm"]
+
+[node name="Battler" type="Node2D"]
+script = ExtResource("1_yyisu")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_hij2r")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../AnimatedSprite2D")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_mbcdm")

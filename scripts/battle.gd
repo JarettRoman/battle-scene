@@ -4,11 +4,14 @@ extends Node2D
 @export var info_box: Label
 
 @onready var player: Node2D = get_node("Player")
-@onready var enemy: Node2D = get_node("Enemy")
+# @onready var first_enemy: Node2D = get_node("Enemy")
 
 @onready var player_hp_counter: Label = get_node("UI/PlayerHP")
 @onready var enemy_hp_counter: Label = get_node("UI/EnemyHP")
 
+var next_enemy: PackedScene = preload("res://scenes/shadow.tscn")
+
+var enemy: Battler = null
 
 var player_turn: bool = true
 
@@ -21,6 +24,8 @@ var timed_input_successful: bool = false
 var attack_inputs: Array[String] = ["ui_up", "ui_up", "ui_accept"]
 
 var successful_inputs: int = 0
+
+var total_wins: int = 0
 
 var skills: Array[Skill]
 
@@ -56,7 +61,9 @@ var current_state: STATES:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	skills = GameManager.equipped_skills
+	setup_opponent()
 
+	player.state_machine.get_node("Attacking").hit_confirm.connect(_on_hit_confirm)
 	for skill in skills:
 		var skill_button = Button.new()
 		skill_button.text = skill.skill_name
@@ -113,7 +120,7 @@ func on_execute() -> void:
 	if not player_turn:
 		command_box.visible = false
 		info_box.text = "The enemy attacks you!"
-		player.health_component.damage(enemy.stats.strength)
+		enemy.attack(player, null)
 	# wait for an animation to play out
 	await get_tree().create_timer(3.0).timeout
 	capture_timed_input = false
@@ -137,9 +144,25 @@ func on_end() -> void:
 
 func on_victory() -> void:
 	info_box.text = "You win! Congratulations!"
+	total_wins += 1
+	battle_started = false
+	enemy.queue_free()
 	await get_tree().create_timer(2.0).timeout
-	GameManager.goto_main_menu()
+	# GameManager.goto_main_menu()
+	if true:
+		setup_opponent()
+		current_state = STATES.START
+	else:
+		info_box.text = "You beat all the enemies! Come back later!"
+		await get_tree().create_timer(2.0).timeout
+		GameManager.goto_main_menu()
 
+func setup_opponent() -> void:
+	enemy = next_enemy.instantiate()
+	add_child(enemy)
+	enemy.set_global_position(Vector2(400, 215))
+	enemy_hp_counter.text = str(clamp(enemy.health_component.health, 0, 999))
+	enemy.state_machine.get_node("Attacking").hit_confirm.connect(_on_hit_confirm)
 
 func on_defeat() -> void:
 	info_box.text = "You lost! Oh no!"
@@ -153,11 +176,7 @@ func _on_skill_button_down(skill: Skill) -> void:
 	capture_timed_input = true
 	await get_tree().create_timer(2.0).timeout
 	if timed_input_successful:
-		# player.play_ability_animation(skill.skill_name)
-		player.attack()
-		var total_damage = player.stats.strength + skill.base_damage
-		enemy.health_component.damage(total_damage)
-		info_box.text = "You deal %s damage!" % total_damage
+		player.attack(enemy, skill)
 	else:
 		info_box.text = "You missed!"
 	successful_inputs = 0
@@ -166,3 +185,7 @@ func _on_skill_button_down(skill: Skill) -> void:
 
 func _on_player_hp_deleted() -> void:
 	print("player defeated signal")
+
+func _on_hit_confirm(_skill_name: String, target: Battler, total_damage: int) -> void:
+	target.health_component.damage(total_damage)
+	info_box.text = "%s takes %d damage!" % [target.name, total_damage]

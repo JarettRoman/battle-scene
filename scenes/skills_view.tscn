@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/skills_view.gd" id="1_svjqc"]
 [ext_resource type="Script" path="res://scripts/skill.gd" id="2_7egnp"]
-[ext_resource type="PackedScene" uid="uid://bd5tgikbhtj71" path="res://scenes/fighter.tscn" id="2_pn41d"]
+[ext_resource type="PackedScene" uid="uid://bd5tgikbhtj71" path="res://scenes/player.tscn" id="2_pn41d"]
 [ext_resource type="Resource" uid="uid://dwfirp8s4akw3" path="res://data/slash.tres" id="3_ba1cv"]
 [ext_resource type="Resource" uid="uid://cswpv0wkp7tpv" path="res://data/stab.tres" id="4_et8ln"]
 

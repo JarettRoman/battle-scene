@@ -29,8 +29,3 @@ func _skill_button_pressed(skill: Skill) -> void:
 	else:
 		print("%s is now equipped" % skill.skill_name)
 		equipped_skills.append(skill)
-	
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

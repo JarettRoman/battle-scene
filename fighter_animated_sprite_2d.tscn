@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccm85fah0mj45"]
+
+[ext_resource type="SpriteFrames" uid="uid://2q0xccci6hvy" path="res://scenes/fighter_sprite_frames.tres" id="1_n4oqf"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D"]
+visible = false
+sprite_frames = ExtResource("1_n4oqf")
+animation = &"idle"

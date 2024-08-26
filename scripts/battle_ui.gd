@@ -6,10 +6,6 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 func initialize(skills: Array[Skill], player_health: int, enemy_health: int) -> void:
 	for skill in skills:
 		var skill_button = Button.new()
