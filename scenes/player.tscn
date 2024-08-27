@@ -8,6 +8,9 @@
 [ext_resource type="Script" path="res://scripts/states/idle.gd" id="6_rlwj2"]
 [ext_resource type="Script" path="res://scripts/states/attack.gd" id="7_xnvqw"]
 
+[sub_resource type="Animation" id="Animation_xxcda"]
+length = 0.001
+
 [sub_resource type="Animation" id="Animation_rs8fr"]
 length = 0.4
 loop_mode = 1
@@ -187,9 +190,6 @@ tracks/1/keys = {
 "update": 1,
 "values": [10, 11, 12, 13, 14, 15, 16, 17]
 }
-
-[sub_resource type="Animation" id="Animation_xxcda"]
-length = 0.001
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6fq16"]
 _data = {
