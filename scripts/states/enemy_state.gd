@@ -6,6 +6,7 @@ const RUNNING = "Running"
 const JUMPING = "Jumping"
 const FALLING = "Falling"
 const ATTACKING = "Attacking"
+const TAKING_DAMAGE = "Taking Damage"
 
 var enemy : Battler
 

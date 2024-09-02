@@ -1,5 +1,5 @@
 extends State
-class_name PlayerState
+class_name PlayerStateBase
 
 const IDLE = "Idle"
 const RUNNING = "Running"

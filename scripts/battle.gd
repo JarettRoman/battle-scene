@@ -7,8 +7,9 @@ extends Node2D
 # @onready var first_enemy: Node2D = get_node("Enemy")
 
 @onready var player_health_bar: HealthBar = $UI/PlayerHealthBar
-@onready var enemy_health_bar: HealthBar = $UI/EnemyHealthBar
 @export var health_bar_scene: PackedScene
+
+var enemy_health_bar: HealthBar
 
 var next_enemy: PackedScene = preload("res://scenes/shadow.tscn")
 
@@ -65,6 +66,7 @@ func _ready() -> void:
 	setup_opponent()
 
 	player.state_machine.get_node("Attacking").hit_confirm.connect(_on_hit_confirm)
+	SignalBus.attack_finished.connect(_on_attack_finished)
 	for skill in skills:
 		var skill_button = Button.new()
 		skill_button.text = skill.skill_name
@@ -84,14 +86,15 @@ func _process(_delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and capture_timed_input and successful_inputs < attack_inputs.size() and event.is_action_pressed(attack_inputs[successful_inputs]):
-		if event.pressed and not event.is_echo():
-			successful_inputs += 1
-			if successful_inputs == attack_inputs.size():
-				timed_input_successful = true
-	elif event is InputEventKey and capture_timed_input and successful_inputs < attack_inputs.size() and not event.is_action_pressed(attack_inputs[successful_inputs]):
-		if event.pressed and not event.is_echo():
-			successful_inputs = 0
+	if not (event is InputEventKey and capture_timed_input):
+		return
+
+	if event.is_echo() or not event.pressed:
+		return
+
+	var result = event.is_action_pressed("ui_accept")
+
+	player.stop_timed_input(result)
 
 
 func on_start() -> void:
@@ -102,7 +105,7 @@ func on_start() -> void:
 		info_box.text = "Starting battle..."
 		battle_started = true
 	
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(1.0).timeout
 		
 	current_state = STATES.AWAIT_INPUT
 		
@@ -123,7 +126,7 @@ func on_execute() -> void:
 		info_box.text = "The enemy attacks you!"
 		enemy.attack(player, null)
 	# wait for an animation to play out
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(1.0).timeout
 	capture_timed_input = false
 	if enemy.health_component.health <= 0:
 		current_state = STATES.VICTORY
@@ -147,7 +150,6 @@ func on_victory() -> void:
 	battle_started = false
 	enemy.queue_free()
 	await get_tree().create_timer(2.0).timeout
-	# GameManager.goto_main_menu()
 	if true:
 		setup_opponent()
 		current_state = STATES.START
@@ -179,15 +181,12 @@ func on_defeat() -> void:
 
 func _on_skill_button_down(skill: Skill) -> void:
 	command_box.visible = false
-	info_box.text = "You use %s! Press Up Up Z!" % skill.skill_name
+	info_box.text = "You use %s!" % skill.skill_name
 	capture_timed_input = true
-	await get_tree().create_timer(2.0).timeout
-	if timed_input_successful:
-		player.attack(enemy, skill)
-	else:
-		info_box.text = "You missed!"
-	successful_inputs = 0
-	timed_input_successful = false
+	player.attack(enemy, skill)
+
+
+func _on_attack_finished() -> void:
 	current_state = STATES.EXECUTE
 
 func _on_player_hp_deleted() -> void:
@@ -195,8 +194,10 @@ func _on_player_hp_deleted() -> void:
 
 func _on_hit_confirm(_skill_name: String, target: Battler, total_damage: int) -> void:
 	target.health_component.damage(total_damage)
+	target._spawn_damage_number(total_damage)
 	if target == player:
 		player_health_bar.health = player.health_component.health
 	else:
-		enemy_health_bar.health = enemy.health_component.health
-	info_box.text = "%s takes %d damage!" % [target.name, total_damage]
+		enemy.take_damage()
+		if is_instance_valid(enemy_health_bar):
+			enemy_health_bar.health = enemy.health_component.health

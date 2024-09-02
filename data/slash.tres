@@ -5,4 +5,4 @@
 [resource]
 script = ExtResource("1_a688x")
 skill_name = "Slash"
-base_damage = 2
+base_damage = 1

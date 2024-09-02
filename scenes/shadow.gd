@@ -12,3 +12,6 @@ func attack(target: Battler, skill: Skill) -> void:
 	EnemyState.ATTACKING,
 	{"target": target, "skill": skill}
 )
+
+func take_damage() -> void:
+	state_machine._transition_to_next_state(EnemyState.TAKING_DAMAGE)

@@ -6,8 +6,8 @@ var equipped_skills : Array[Skill]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var skill = load("res://data/omegaslash.tres")
-	equipped_skills.append(skill)
+	# var skill = load("res://data/omegaslash.tres")
+	# equipped_skills.append(skill)
 	var root = get_tree().root
 	current_scene = root.get_child(root.get_child_count() - 1)
 

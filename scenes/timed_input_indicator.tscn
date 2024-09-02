@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2eahloh5fnt0"]
+
+[ext_resource type="Script" path="res://scripts/timed_input_indicator.gd" id="1_tng2t"]
+[ext_resource type="Texture2D" uid="uid://c81g7dox3ciyy" path="res://assets/Default/blank_square.png" id="2_xorkk"]
+[ext_resource type="Texture2D" uid="uid://w1npsimqipan" path="res://assets/Default/custom_z.png" id="3_tq6hi"]
+
+[node name="TimedInputIndicator" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -576.0
+offset_bottom = -296.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_tng2t")
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+value = 50.0
+fill_mode = 5
+texture_under = ExtResource("2_xorkk")
+texture_progress = ExtResource("2_xorkk")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(1, 0.6, 0, 1)
+
+[node name="ButtonIcon" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+texture = ExtResource("3_tq6hi")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

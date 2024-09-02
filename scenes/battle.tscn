@@ -30,6 +30,7 @@ size_flags_vertical = 4
 script = ExtResource("5_pehbf")
 
 [node name="CommandBox" type="VBoxContainer" parent="UI"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.15
@@ -70,14 +71,6 @@ offset_top = 56.0
 offset_right = 256.0
 offset_bottom = 64.0
 
-[node name="EnemyHealthBar" parent="UI" instance=ExtResource("5_tqp8w")]
-layout_mode = 0
-offset_left = 384.0
-offset_top = 56.0
-offset_right = 552.0
-offset_bottom = 64.0
-
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_fljgp")
-volume_db = -80.0
 autoplay = true

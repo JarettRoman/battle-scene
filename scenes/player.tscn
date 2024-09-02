@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bd5tgikbhtj71"]
+[gd_scene load_steps=17 format=3 uid="uid://bd5tgikbhtj71"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ehek7"]
 [ext_resource type="Resource" uid="uid://dju8kdkgmvgi0" path="res://data/player_stats.tres" id="2_r12mr"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dsgdi0805gtdw" path="res://scenes/health_component.tscn" id="5_qwbu3"]
 [ext_resource type="Script" path="res://scripts/states/idle.gd" id="6_rlwj2"]
 [ext_resource type="Script" path="res://scripts/states/attack.gd" id="7_xnvqw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_84r3n"]
 
 [sub_resource type="Animation" id="Animation_xxcda"]
 length = 0.001
@@ -103,11 +105,14 @@ tracks/0/path = NodePath("StateMachine/Attacking")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
 "method": &"_hit"
+}, {
+"args": [],
+"method": &"_on_end_of_attack_animation"
 }]
 }
 tracks/1/type = "value"
@@ -134,10 +139,23 @@ tracks/2/keys = {
 "update": 1,
 "values": [0, 1, 2, 3, 4]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start_timed_input"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_f5ucp"]
 length = 0.5
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -162,10 +180,40 @@ tracks/1/keys = {
 "update": 1,
 "values": [5, 6, 7, 8, 9]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start_timed_input"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Attacking")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_hit"
+}, {
+"args": [],
+"method": &"_on_end_of_attack_animation"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_iqhvg"]
 length = 0.8
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -190,6 +238,37 @@ tracks/1/keys = {
 "update": 1,
 "values": [10, 11, 12, 13, 14, 15, 16, 17]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start_timed_input"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Attacking")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_hit"
+}, {
+"args": [],
+"method": &"_on_end_of_attack_animation"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6fq16"]
 _data = {
@@ -209,11 +288,12 @@ health_component = NodePath("HealthComponent")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_84r3n")
 texture = ExtResource("3_wj6bi")
 flip_h = true
 hframes = 7
 vframes = 6
-frame = 29
+frame = 9
 metadata/_aseprite_wizard_config_ = {
 "i_mode": -1,
 "keep_anim_length": false,

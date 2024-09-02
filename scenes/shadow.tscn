@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://l6o11pbgw1df"]
+[gd_scene load_steps=19 format=3 uid="uid://l6o11pbgw1df"]
 
 [ext_resource type="Script" path="res://scenes/shadow.gd" id="1_xfm48"]
 [ext_resource type="Resource" uid="uid://cwwt75mclc8w3" path="res://data/enemy_stats.tres" id="2_3lilb"]
@@ -7,6 +7,23 @@
 [ext_resource type="PackedScene" uid="uid://cya3s0x07o1hg" path="res://scenes/state_machine.tscn" id="4_hhrit"]
 [ext_resource type="Script" path="res://scripts/states/shadow/idle.gd" id="5_i8x2r"]
 [ext_resource type="Script" path="res://scripts/states/shadow/attacking.gd" id="7_xakec"]
+[ext_resource type="Script" path="res://scripts/states/shadow/shadow_taking_damage_state.gd" id="8_bkt8o"]
+[ext_resource type="Shader" uid="uid://cu07auoov8tik" path="res://data/damage_flash.tres" id="8_toa58"]
+
+[sub_resource type="Animation" id="Animation_k1k21"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
 
 [sub_resource type="Animation" id="Animation_vkq02"]
 resource_name = "shadow_attack_anim"
@@ -50,6 +67,9 @@ tracks/2/keys = {
 }]
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cvqmj"]
+shader = ExtResource("8_toa58")
+
 [sub_resource type="Animation" id="Animation_nnf8o"]
 length = 0.5
 tracks/0/type = "value"
@@ -75,6 +95,47 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [38, 39, 40, 41, 42]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:material")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [SubResource("ShaderMaterial_cvqmj"), null, SubResource("ShaderMaterial_cvqmj"), null]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Taking Damage")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_freeze_frame_impact"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_u3y7u"]
+resource_name = "shadow_defeated_anim"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [42]
 }
 
 [sub_resource type="Animation" id="Animation_idgw4"]
@@ -162,8 +223,10 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jnbpx"]
 _data = {
+"RESET": SubResource("Animation_k1k21"),
 "shadow_attack_anim": SubResource("Animation_vkq02"),
 "shadow_damaged_anim": SubResource("Animation_nnf8o"),
+"shadow_defeated_anim": SubResource("Animation_u3y7u"),
 "shadow_dive_anim": SubResource("Animation_idgw4"),
 "shadow_idle_anim": SubResource("Animation_n6xmg"),
 "shadow_run_anim": SubResource("Animation_fudfn")
@@ -179,7 +242,7 @@ texture_filter = 1
 texture = ExtResource("2_53wop")
 hframes = 7
 vframes = 7
-frame = 35
+frame = 39
 metadata/_aseprite_wizard_config_ = {
 "i_mode": -1,
 "keep_anim_length": false,
@@ -207,6 +270,9 @@ script = ExtResource("5_i8x2r")
 
 [node name="Attacking" type="Node" parent="StateMachine"]
 script = ExtResource("7_xakec")
+
+[node name="Taking Damage" type="Node" parent="StateMachine"]
+script = ExtResource("8_bkt8o")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
