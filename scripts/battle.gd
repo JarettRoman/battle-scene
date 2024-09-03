@@ -98,14 +98,15 @@ func _input(event: InputEvent) -> void:
 
 
 func on_start() -> void:
+	var adjectives = ["untamed", "ferocious", "dangerous", "savage", "fierce", "formidable", "terrifying", "scary", "scary-ass"]
 	if battle_started:
 		current_state = STATES.AWAIT_INPUT
 		return
 	else:
-		info_box.text = "Starting battle..."
+		info_box.text = "You've encountered a %s %s!" % [adjectives[randi_range(0, adjectives.size() - 1)], enemy.name]
 		battle_started = true
 	
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(2.0).timeout
 		
 	current_state = STATES.AWAIT_INPUT
 		
