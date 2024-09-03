@@ -14,10 +14,18 @@ func enter(_previous_state_path: String, data := {}) -> void:
 	skill = data["skill"]
 	attack_index = 0
 	# SignalBus.attack_finished.connect(player.attack_finished)
-	player.animation_player.play("run")
-	animate()
-	tween.tween_property(player.get_node("Sprite2D"), "position", Vector2(150,0), 0.5)
-	tween.tween_callback(foo)
+	# if melee attack, we run
+	# if ranged attack, we shoot
+	print(skill.attack_type)
+	if skill.attack_type == "Melee":
+		player.animation_player.play("run")
+		animate()
+		tween.tween_property(player.get_node("Sprite2D"), "position", Vector2(150,0), 0.5)
+		tween.tween_callback(foo)
+	elif skill.attack_type == "Ranged":
+		if skill.skill_name == "Thunder":
+			player.animation_player.play("sora_magic_1")
+		
 
 func foo() -> void:
 	player.animation_player.play("slash_1")
@@ -26,17 +34,21 @@ func foo() -> void:
 
 func _on_end_of_attack_animation() -> void:
 	attack_index += 1
-	if attack_index < attack_animations.size():	
+	if skill.attack_type == "Melee" and attack_index < attack_animations.size():	
 		player.animation_player.play(attack_animations[attack_index])
 	else:
-		player.get_node("Sprite2D").flip_h = false
-		player.animation_player.play("run")	
-		animate()
-		tween.tween_property(player.get_node("Sprite2D"), "position", Vector2(0,0), 0.5)
-		tween.tween_callback(func():
-			player.get_node("Sprite2D").flip_h = true
+		if skill.attack_type == "Melee":
+			player.get_node("Sprite2D").flip_h = false
+			player.animation_player.play("run")	
+			animate()
+			tween.tween_property(player.get_node("Sprite2D"), "position", Vector2(0,0), 0.5)
+			tween.tween_callback(func():
+				player.get_node("Sprite2D").flip_h = true
+				finished.emit(IDLE)
+			)
+		elif skill.attack_type == "Ranged":
+			# await get_tree().create_timer(0.5).timeout
 			finished.emit(IDLE)
-		)
 
 func _hit() -> void:
 	hit_confirm.emit(skill.skill_name, target, player.stats.strength + skill.base_damage)

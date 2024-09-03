@@ -98,7 +98,7 @@ func _input(event: InputEvent) -> void:
 
 
 func on_start() -> void:
-	var adjectives = ["untamed", "ferocious", "dangerous", "savage", "fierce", "formidable", "terrifying", "scary", "scary-ass"]
+	var adjectives = ["ferocious", "dangerous", "savage", "fierce", "formidable", "terrifying", "scary"]
 	if battle_started:
 		current_state = STATES.AWAIT_INPUT
 		return

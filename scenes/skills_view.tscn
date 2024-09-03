@@ -1,15 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://kqmm0clka6tm"]
+[gd_scene load_steps=8 format=3 uid="uid://kqmm0clka6tm"]
 
 [ext_resource type="Script" path="res://scripts/skills_view.gd" id="1_svjqc"]
 [ext_resource type="Script" path="res://scripts/skill.gd" id="2_7egnp"]
 [ext_resource type="PackedScene" uid="uid://bd5tgikbhtj71" path="res://scenes/player.tscn" id="2_pn41d"]
 [ext_resource type="Resource" uid="uid://dwfirp8s4akw3" path="res://data/slash.tres" id="3_ba1cv"]
 [ext_resource type="Resource" uid="uid://cswpv0wkp7tpv" path="res://data/stab.tres" id="4_et8ln"]
+[ext_resource type="Resource" uid="uid://c0briybbhydto" path="res://data/thunder.tres" id="5_elajc"]
 
 [sub_resource type="Resource" id="Resource_66gk4"]
 script = ExtResource("2_7egnp")
 skill_name = "Fence"
 base_damage = 3
+attack_type = "Melee"
 
 [node name="SkillsView" type="Control"]
 layout_mode = 3
@@ -19,7 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_svjqc")
-skills = Array[ExtResource("2_7egnp")]([ExtResource("3_ba1cv"), ExtResource("4_et8ln"), SubResource("Resource_66gk4")])
+skills = Array[ExtResource("2_7egnp")]([ExtResource("3_ba1cv"), ExtResource("4_et8ln"), SubResource("Resource_66gk4"), ExtResource("5_elajc")])
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
