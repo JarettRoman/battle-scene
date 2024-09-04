@@ -16,7 +16,6 @@ func enter(_previous_state_path: String, data := {}) -> void:
 	# SignalBus.attack_finished.connect(player.attack_finished)
 	# if melee attack, we run
 	# if ranged attack, we shoot
-	print(skill.attack_type)
 	if skill.attack_type == "Melee":
 		player.animation_player.play("run")
 		animate()

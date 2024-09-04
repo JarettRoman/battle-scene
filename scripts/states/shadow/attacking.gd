@@ -35,6 +35,7 @@ func _hit() -> void:
 func exit() -> void:
 	target = null
 	enemy.animation_player.animation_finished.disconnect(_on_animation_finished)
+	SignalBus.attack_finished.emit()
 
 func animate() -> void:
 	if tween:
